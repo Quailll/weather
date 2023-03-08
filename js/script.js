@@ -8,7 +8,7 @@ function weather(currentWeather) {
   console.log(currentWeather);
   var titleEl = currentWeather.name;
   var tempEl = currentWeather.main.temp;
-  var windEl = currentWeather.main.wind;
+  var windEl = currentWeather.wind.speed;
   var humidityEl = currentWeather.main.humidity;
   var img = currentWeather.weather[0].icon;
   var weatherToday = document.createElement("section");
@@ -16,7 +16,7 @@ function weather(currentWeather) {
               <h2>${titleEl}</h2>
               <img src="https://openweathermap.org/img/wn/${img}@2x.png">
               <p>Temp:${tempEl}</p>
-              <p>Wind:${windEl}</p>
+              <p>Wind:${windEl}mph</p>
               <p>Humidity:${humidityEl}</p>
             `;
   document.getElementById("today").append(weatherToday);
@@ -41,8 +41,8 @@ function forecast(currentForecast) {
           
             <h3>${titleEl}</h3>
             <img src="https://openweathermap.org/img/wn/${img}@2x.png">
-            <p>Temp:${tempEl}</p>
-            <p>Wind:${windEl}</p>
+            <p>Temp:${tempEl}F</p>
+            <p>Wind:${windEl}mph</p>
             <p>Humidity:${humidityEl}</p>
           
           
@@ -55,7 +55,7 @@ function forecast(currentForecast) {
 
 function weatherFetch() {
   var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=f7469905dc510624a4d06798128d3ada`;
-
+ 
   fetch(weatherUrl)
     .then(function (request) {
       return request.json();
@@ -91,37 +91,77 @@ function forecastFetch() {
 document.getElementById("submit").addEventListener("click", function (event) {
   event.preventDefault();
   
-
   var search = document.getElementById("searchBar").value.trim();
   if (!search) {
     return;
   }
-  
+  cityNameList.push(search);
   var locationUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search}&appid=f7469905dc510624a4d06798128d3ada`;
 
-  fetch(locationUrl)
+  city(locationUrl)
+  var historyButton= document.createElement('button')
+    historyButton.className = "historyBtn row"
+    historyButton.textContent = search
+    historyButton.addEventListener('click', function(event){
+    city(locationUrl)});
+  document.getElementById('savedcities').append(historyButton)
+  
+  localStorage.setItem("cityList", JSON.stringify(cityNameList));
+});
+
+function city(Url) {
+  fetch(Url)
     .then(function (request) {
       return request.json();
     })
     .then(function (data) {
-      console.log(data)
+      console.log(data);
       lon = data[0].lon;
       lat = data[0].lat;
-    
+
       forecastFetch();
       weatherFetch();
     })
     .catch(function (error) {
       console.log(error);
     });
+}
 
-  var historyButton= document.createElement('button')
-    historyButton.className = "historyBtn row"
-    historyButton.textContent = search
-  document.getElementById('savedcities').append(historyButton)
 
-  
-});
+var cityNameList = JSON.parse(localStorage.getItem("cityList")) || [];
+function createHistory(name){
+  var historyButton = document.createElement("button");
+  historyButton.className = "historyBtn row";
+  historyButton.textContent = name;
+  var locationUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${name}&appid=f7469905dc510624a4d06798128d3ada`;
+  console.log(JSON.stringify(name));
+  historyButton.addEventListener("click", function (event) {
+    city(locationUrl);
+    console.log(JSON.stringify(name));
+  });
+
+  document.getElementById("savedcities").append(historyButton);
+}
+function savedHistory() {
+  for (let i = 0; i < cityNameList.length; i++) {
+    var search = cityNameList[i];
+    createHistory(search);
+    
+  }
+}
+savedHistory()
+
+
+// var searchedCities 
+  // var myvar = JSON.parse(localStorage.getItem('itemName')) || []
+  // if (){
+
+  // }
+//want a usable variable that will be an array 
+//var searchedCities
+//if cities exist searchedCities will be the result of getting local storage
+//myvar.push('someString')
+//else it will be an empty array
   
 
  
