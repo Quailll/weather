@@ -3,70 +3,54 @@ var lat ="";
 var currentWeather = "";
 var currentForecast = "";
 
-function weather(data) {
-  console.log(data)
-    var titleEl = currentWeather.name;
-    var tempEl = "";
-    var windEl = "";
-    var humidityEl = "";
+function weather(currentWeather) {
+  document.getElementById("today").innerHTML = "";
+  console.log(currentWeather);
+  var titleEl = currentWeather.name;
+  var tempEl = "";
+  var windEl = "";
+  var humidityEl = "";
 
-    var weatherToday = document.createElement("section");
-    weatherToday.innerHTML = `
+  var weatherToday = document.createElement("section");
+  weatherToday.innerHTML = `
               <h2>title</h2>
               <p>Temp:</p>
               <p>Wind:</p>
               <p>Humidity:</p>
             `;
-    document.getElementById("today").append(weatherToday);
-  console.log
+  document.getElementById("today").append(weatherToday);
+  console.log;
 }
 
 
 
-function forecast(data) {
-  console.log(data)
-  var titleEl = "";
-  var tempEl = "";
-  var windEl = "";
-  var humidityEl = "";
-  var forecast5 = document.createElement("section");
-  forecast5.className = "row m-3";
-  forecast5.innerHTML = `
-          <h2>5 Day Forecast</h2>
-          <section class="card">
-            <h3>title</h3>
-            <p>Temp:</p>
-            <p>Wind:</p>
-            <p>Humidity:</p>
-          </section>
-          <section class="card">
-            <h3>title</h3>
-            <p>Temp:</p>
-            <p>Wind:</p>
-            <p>Humidity:</p>
-          </section>
-          <section class="card">
-            <h3>title</h3>
-            <p>Temp:</p>
-            <p>Wind:</p>
-            <p>Humidity:</p>
-          </section>
-          <section class="card">
-            <h3>title</h3>
-            <p>Temp:</p>
-            <p>Wind:</p>
-            <p>Humidity:</p>
-          </section>
-          <section class="card">
-            <h3>title</h3>
-            <p>Temp:</p>
-            <p>Wind:</p>
-            <p>Humidity:</p>
-          </section>
-        </section>
+function forecast(currentForecast) {
+  document.getElementById("forecast").innerHTML = "";
+  for (let i = 0; i < currentForecast.length; i+=8) {
+    
+    var titleEl = currentForecast[i].dt_txt;
+    var tempEl = currentForecast[i].main.temp;
+    var windEl = currentForecast[i].wind.speed;
+    var humidityEl = currentForecast[i].main.humidity;
+    var img = currentForecast[i].weather[0].icon;
+    var forecast5 = document.createElement("section");
+    forecast5.className = "row card m-3";
+    forecast5.innerHTML = `
+          
+          
+            <h3>${titleEl}</h3>
+            <img src="https://openweathermap.org/img/wn/${img}@2x.png">
+            <p>Temp:${tempEl}</p>
+            <p>Wind:${windEl}</p>
+            <p>Humidity:${humidityEl}</p>
+          
+          
           `;
-  document.getElementById("forecast").append(forecast5);
-}
+    document.getElementById("forecast").appendChild(forecast5);
+  }
+  
+  
+};
 
 function weatherFetch() {
   var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=f7469905dc510624a4d06798128d3ada`;
@@ -77,16 +61,17 @@ function weatherFetch() {
     })
     .then(function (data) {
       console.log(data);
-      var currentWeather = data.list;
+      var currentWeather = data;
       weather(currentWeather);
     })
     .catch(function (error) {
       console.log(error);
     });
-}
+    
+};
 function forecastFetch() {
   var forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=f7469905dc510624a4d06798128d3ada`;
-  fetch(weatherURL)
+  fetch(forecastUrl)
     .then(function (request) {
       return request.json();
     })
@@ -98,13 +83,13 @@ function forecastFetch() {
     .catch(function (error) {
       console.log(error);
     });
-}
+ };   
 
 
 
 document.getElementById("submit").addEventListener("click", function (event) {
   event.preventDefault();
-  document.getElementById("forecast").innerHTML = "";
+  
 
   var search = document.getElementById("searchBar").value.trim();
   if (!search) {
@@ -122,8 +107,8 @@ document.getElementById("submit").addEventListener("click", function (event) {
       lon = data[0].lon;
       lat = data[0].lat;
     
-      forecast();
-      weather();
+      forecastFetch();
+      weatherFetch();
     })
     .catch(function (error) {
       console.log(error);
