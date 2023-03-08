@@ -49,3 +49,15 @@ p {
 img {
   width: 400px;
 }
+
+.historyBtn {
+  background-color: blue;
+  color: white;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  padding: 10px;
+  margin: 3px;
+}

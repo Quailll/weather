@@ -113,6 +113,12 @@ document.getElementById("submit").addEventListener("click", function (event) {
     .catch(function (error) {
       console.log(error);
     });
+
+  var historyButton= document.createElement('button')
+    historyButton.className = "historyBtn row"
+    historyButton.textContent = search
+  document.getElementById('savedcities').append(historyButton)
+
 });
   
 
