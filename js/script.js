@@ -7,16 +7,17 @@ function weather(currentWeather) {
   document.getElementById("today").innerHTML = "";
   console.log(currentWeather);
   var titleEl = currentWeather.name;
-  var tempEl = "";
-  var windEl = "";
-  var humidityEl = "";
-
+  var tempEl = currentWeather.main.temp;
+  var windEl = currentWeather.main.wind;
+  var humidityEl = currentWeather.main.humidity;
+  var img = currentWeather.weather[0].icon;
   var weatherToday = document.createElement("section");
   weatherToday.innerHTML = `
-              <h2>title</h2>
-              <p>Temp:</p>
-              <p>Wind:</p>
-              <p>Humidity:</p>
+              <h2>${titleEl}</h2>
+              <img src="https://openweathermap.org/img/wn/${img}@2x.png">
+              <p>Temp:${tempEl}</p>
+              <p>Wind:${windEl}</p>
+              <p>Humidity:${humidityEl}</p>
             `;
   document.getElementById("today").append(weatherToday);
   console.log;
@@ -55,7 +56,7 @@ function forecast(currentForecast) {
 function weatherFetch() {
   var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=f7469905dc510624a4d06798128d3ada`;
 
-  fetch(weatherURL)
+  fetch(weatherUrl)
     .then(function (request) {
       return request.json();
     })
@@ -91,10 +92,6 @@ document.getElementById("submit").addEventListener("click", function (event) {
   event.preventDefault();
   
 
-  var search = document.getElementById("searchBar").value.trim();
-  if (!search) {
-    return;
-  }
   
   var locationUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search}&appid=f7469905dc510624a4d06798128d3ada`;
 
@@ -119,6 +116,7 @@ document.getElementById("submit").addEventListener("click", function (event) {
     historyButton.textContent = search
   document.getElementById('savedcities').append(historyButton)
 
+  
 });
   
 
