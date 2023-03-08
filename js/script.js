@@ -1,31 +1,32 @@
 var lon ="";
 var lat ="";
+var currentWeather = "";
+var currentForecast = "";
 
+function weather(currentWeather) {
+    var titleEl = currentWeather[0].name;
+    var tempEl = "";
+    var windEl = "";
+    var humidityEl = "";
 
-function weather(){
-  // for (let i = 0; i < array.length; i++) {
-  var titleEl= "";
-  var tempEl= "";
-  var windEl= "";
-  var humidityEl= "";
-
-  var weatherToday = document.createElement('section')
-  weatherToday.innerHTML = `
-            <h2>title</h2>
-            <p>Temp:</p>
-            <p>Wind:</p>
-            <p>Humidity:</p>
-          `;
-  document.getElementById('today').append(weatherToday)
-    
-  // }
+    var weatherToday = document.createElement("section");
+    weatherToday.innerHTML = `
+              <h2>title</h2>
+              <p>Temp:</p>
+              <p>Wind:</p>
+              <p>Humidity:</p>
+            `;
+    document.getElementById("today").append(weatherToday);
+  
 }
 
 
 
-function forecast(days) {
-  // for (let i = 0; i < array.length; i++) {
-    console.log(days)
+function forecast(currentForecast) {
+  var titleEl = "";
+  var tempEl = "";
+  var windEl = "";
+  var humidityEl = "";
   var forecast5 = document.createElement("section");
   forecast5.className = "row m-3";
   forecast5.innerHTML = `
@@ -63,50 +64,72 @@ function forecast(days) {
         </section>
           `;
   document.getElementById("forecast").append(forecast5);
-
-  // }
 }
 
-document.getElementById("submit").addEventListener("click", function (event) {
-  event.preventDefault();
-  document.getElementById("forecast").innerHTML = "";
+function weatherFetch() {
+  var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=f7469905dc510624a4d06798128d3ada`;
 
-  var search = document.getElementById("searchBar").value;
-
-  var weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=f7469905dc510624a4d06798128d3ada`;
-
-  fetch(weatherUrl)
+  fetch(weatherURL)
     .then(function (request) {
       return request.json();
     })
     .then(function (data) {
       console.log(data);
-      var days = data.list;
-      weather(days);
+      var currentWeather = data.list;
+      weather(currentWeather);
+    })
+    .catch(function (error) {
+      console.log(error);
     });
-});
-
-
-document.getElementById('submit').addEventListener('click', function (event) {
-  event.preventDefault();
-  document.getElementById('forecast').innerHTML = "";
-
-  var search = document.getElementById('searchBar').value;
-
-  var weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=f7469905dc510624a4d06798128d3ada`;
-
-  fetch(weatherUrl)
-    .then(function (request){
+}
+function forecastFetch() {
+  var forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=f7469905dc510624a4d06798128d3ada`;
+  fetch(weatherURL)
+    .then(function (request) {
       return request.json();
     })
-    .then(function(data){
+    .then(function (data) {
       console.log(data);
-      var days = data.list;
-      forecast(days);
+      var currentForecast = data.list;
+      forecast(currentForecast);
     })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
 
-})
 
+
+document.getElementById("submit").addEventListener("click", function (event) {
+  event.preventDefault();
+  document.getElementById("forecast").innerHTML = "";
+
+  var search = document.getElementById("searchBar").value.trim();
+  if (!search) {
+    return;
+  }
+  
+  var locationUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search}&appid=f7469905dc510624a4d06798128d3ada`;
+
+  fetch(locationUrl)
+    .then(function (request) {
+      return request.json();
+    })
+    .then(function (data) {
+      console.log(data)
+      lon = data[0].lon;
+      lat = data[0].lat;
+    
+      forecast();
+      weather();
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+});
+  
+
+ 
 // var cityNameList;
 
 // cityNameList = GetLocalStorage:
