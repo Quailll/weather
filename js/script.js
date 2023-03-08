@@ -92,6 +92,10 @@ document.getElementById("submit").addEventListener("click", function (event) {
   event.preventDefault();
   
 
+  var search = document.getElementById("searchBar").value.trim();
+  if (!search) {
+    return;
+  }
   
   var locationUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search}&appid=f7469905dc510624a4d06798128d3ada`;
 
