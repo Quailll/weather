@@ -3,8 +3,9 @@ var lat ="";
 var currentWeather = "";
 var currentForecast = "";
 
-function weather(currentWeather) {
-    var titleEl = currentWeather[0].name;
+function weather(data) {
+  console.log(data)
+    var titleEl = currentWeather.name;
     var tempEl = "";
     var windEl = "";
     var humidityEl = "";
@@ -17,12 +18,13 @@ function weather(currentWeather) {
               <p>Humidity:</p>
             `;
     document.getElementById("today").append(weatherToday);
-  
+  console.log
 }
 
 
 
-function forecast(currentForecast) {
+function forecast(data) {
+  console.log(data)
   var titleEl = "";
   var tempEl = "";
   var windEl = "";
