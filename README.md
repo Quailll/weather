@@ -14,7 +14,7 @@ It was made to practice and show off my skills with JavaScript
 [alt text](./images/Screenshot%202023-03-07%20230115.png)
 [alt text](./images/Screenshot%202023-03-07%20230154.png)
 I starting to get a better understanding of how javascript works and how I need to set everything up. I still have a lot of work to do, but at least I'm always progressing and learning more. 
-
+https://quailll.github.io/weather/ 
 ## Collaborations
 - Andy Nguyen we worked on the project together.
 - Eric Nguyen help me understand some parts I was stuck at as well.
